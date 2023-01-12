@@ -1,15 +1,19 @@
 import Tours from "./components/Tours";
+import Loading from "./components/Loading";
 import { useEffect, useState } from "react";
 
 const url = "https://course-api.com/react-tours-project";
 
 function App() {
   const [tours, setTours] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTours = async () => {
+    setIsLoading(true);
     const res = await fetch(url);
     const data = await res.json();
     setTours(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -20,6 +24,10 @@ function App() {
     const remainingTours = tours.filter((tour) => tour.id !== id);
     setTours(remainingTours);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (tours.length === 0) {
     return (
